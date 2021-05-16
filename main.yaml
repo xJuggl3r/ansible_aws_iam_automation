@@ -4,10 +4,34 @@
     connection: local
     gather_facts: False
     
-
     tasks:
+    - name: Execute the command in remote shell; Create Policies 
+      script: ./aws-cria-policy.sh forceMFA force_mfapolicy.txt
+      register: out
+
+    - debug: var=out.stdout_lines
+
+    - name: Execute the command in remote shell; Create Groups 
+      script: ./aws-cria-grupo.sh usuarios2.csv
+      register: out
+
+    - debug: var=out.stdout_lines
+
+    - name: Execute the command in remote shell; Attach Policies to Groups 
+      script: ./aws-attach-policy.sh usuarios2.csv
+      register: out
+
+    - debug: var=out.stdout_lines
+
     - name: Execute the command in remote shell; Create and Add users to groups 
       script: ./aws-iam-cria-usuario.sh usuarios2.csv
       register: out
 
     - debug: var=out.stdout_lines
+
+    # tasks:
+    # - name: Create Enforce MFA Policy
+    #   script: 
+    #   register: out
+
+    # - debug: var=out.stdout_lines
