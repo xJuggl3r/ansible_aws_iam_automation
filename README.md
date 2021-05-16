@@ -1,6 +1,6 @@
 ## ANSIBLE AWS IAM Automation
 
-### A little IaaC to migrate on-prem users to AWS using Ansible
+### A small IaaC to migrate on-prem users to AWS using Ansible
 ***
 <br/>
 
