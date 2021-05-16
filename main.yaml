@@ -1,0 +1,13 @@
+---
+  - name: Add users
+    hosts: local
+    connection: local
+    gather_facts: False
+    
+
+    tasks:
+    - name: Execute the command in remote shell; Create and Add users to groups 
+      script: ./aws-iam-cria-usuario.sh usuarios2.csv
+      register: out
+
+    - debug: var=out.stdout_lines
