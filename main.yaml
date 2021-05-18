@@ -4,6 +4,7 @@
     connection: local
     gather_facts: False
     
+    # Create MFA policy
     tasks:
     - name: Execute the command in remote shell; Create Policies 
       script: ./aws-cria-policy.sh forceMFA force_mfapolicy.txt
@@ -11,27 +12,35 @@
 
     - debug: var=out.stdout_lines
 
+    # Create Groups
     - name: Execute the command in remote shell; Create Groups 
       script: ./aws-cria-grupo.sh usuarios2.csv
       register: out
 
     - debug: var=out.stdout_lines
 
+    # Attach policies to groups
     - name: Execute the command in remote shell; Attach Policies to Groups 
       script: ./aws-attach-policy.sh usuarios2.csv
       register: out
 
     - debug: var=out.stdout_lines
 
-    - name: Execute the command in remote shell; Create and Add users to groups 
-      script: ./aws-iam-cria-usuario.sh usuarios2.csv
-      register: out
+    # Create Users, Pass and Add users to Groups
+    - read_csv:
+        path: usuarios2.csv
+        key: usuarios
+      register: users
 
-    - debug: var=out.stdout_lines
+    - name: Create IAM Users and Password
+      community.aws.iam:
+        iam_type: user
+        name: "{{ item.value.usuarios }}"
+        state: present
+        password: "{{ item.value.senha }}"
+        groups: "{{ item.value.grupo }}"
+        access_key_state: create
+      loop: "{{ users.dict|dict2items }}"
 
-    # tasks:
-    # - name: Create Enforce MFA Policy
-    #   script: 
-    #   register: out
 
-    # - debug: var=out.stdout_lines
+
