@@ -22,4 +22,9 @@ What it does:
 
 <br/>
 
+### Obs:
+Obviously, the .csv file wouldn't be in the repo (a local mock data is being used just as an example).
+
+<br/>
+
 ### #ANSIBLECRY #THECLOUDBOOTCAMP
